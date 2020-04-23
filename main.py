@@ -7,7 +7,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 # This text summarization aims to extract the most important sentences from the 
 # Hong Kong Financial Budget 2020-21, which has 84 sentences and 822 different words
 # (including a few kinds of punctuations), using TFDIF score. After this algorithm,
-# there will be 5 sentences left as the summary for the whole text.
+# there will be 5 sentences left as the summary for the whole text and 81 important
+# words will be selected.
 ###
 
 # 0. import
@@ -66,15 +67,25 @@ def vectorize(text):
 
 text_sparse, tfidf = vectorize(text)
 
-# 3. text summarization
+# 4. tfidf score mean masking
 
-def mean_mask_text(text): # whole text level
+def mean_mask_sents(text):
       mean_thresold = 0.008
       mean_score = text.mean(axis=1)
-      mean_score_mask = mean_score>=mean_thresold
-      return mean_score_mask
+      mean_score_mask_sents = mean_score>=mean_thresold
+      return mean_score_mask_sents
 
-mean_score_mask = mean_mask_text(text_sparse)
+mean_score_mask_sents = mean_mask_sents(text_sparse)
+
+def mean_mask_words(text):
+      mean_thresold = 0.01
+      mean_score = text.mean(axis=-2)
+      mean_score_mask_sents = mean_score>=mean_thresold
+      return mean_score_mask_sents
+
+mean_score_mask_sents_words = mean_mask_words(text_sparse)
+
+# 5. text summarization
 
 def sents_filtering(text,mask):
       output = []
@@ -88,6 +99,15 @@ def rejoin_tokens(text):
             text[sents] = ' '.join(text[sents])
       return text
 
-text = sents_filtering(text,mean_score_mask)
-text = rejoin_tokens(text)
-print(text)
+text = sents_filtering(text,mean_score_mask_sents)
+result_text = rejoin_tokens(text)
+
+# 6. important words analysis
+
+def important_words(text,mask):
+      list_of_words = np.array(text)
+      mask = np.squeeze(np.asarray(mask))
+      words = list_of_words[mask]
+      return words
+
+important_words = important_words(tfidf.get_feature_names(),mean_score_mask_sents_words)
