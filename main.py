@@ -4,8 +4,8 @@ import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 ###
-# This text summarization aims to extract the most important sentences from the 
-# Hong Kong Financial Budget 2020-21, which has 84 sentences and 822 different words
+# This text summarization aims to extract the most important sentences and words from 
+# the Hong Kong Financial Budget 2020-21, which has 84 sentences and 822 different words
 # (including a few kinds of punctuations), using TFDIF score. After this algorithm,
 # there will be 5 sentences left as the summary for the whole text and 81 important
 # words will be selected.
