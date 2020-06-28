@@ -20,7 +20,7 @@ b. tokenization and lemmatization
 
 The list of part-of-speech tags used in NLTK used for lemmatization:
 
-        https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html
+    https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html
 
 #### 3. tfidf vectorization
 
